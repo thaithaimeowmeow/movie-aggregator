@@ -1,0 +1,39 @@
+<div class="video-item">
+
+    <a class="thumbnail">
+
+        <div class="poster">
+
+            <img #posterImg loading="lazy" [src]="posterUrl" [alt]="movie.title" (error)="useFallback()" />
+
+        </div>
+        <div class="date-overlay">
+            {{ movie.release_date }}
+        </div>
+
+        <div class="rating-overlay">
+            ⭐ {{ movie.vote_average }}
+        </div>
+
+        <!-- <div class="network">
+            Netflix
+        </div> -->
+
+    </a>
+
+    <h3 class="title font-bold text-lg text-white">{{ movie.title }}</h3>
+
+    <p class="description text-white text-sm">
+        {{ movie.overview }}
+    </p>
+
+    <!-- <div class="text-white" *ngIf="movie.adult ; else underAge">
+        You can watch this movie
+    </div>
+
+    <ng-template #underAge>
+        <div class="text-white">You cannot watch this movie</div>
+    </ng-template> -->
+
+
+</div>
