@@ -1,4 +1,0 @@
-export const environment = {
-  production: false,
-  tmdbToken: "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyNjkyMWY4YzI4ZmY5ZmQzMjYwZDk5M2FiNTc5MzNhOCIsIm5iZiI6MTc3MzUwODk0OS4wNCwic3ViIjoiNjliNTk5NTU2ZjExNzBmMTgxNzMxZmM2Iiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.yBaQ4_RFHbcerO3nGuLB4Cwat8_199V5KQeAmmurP8o"
-};
