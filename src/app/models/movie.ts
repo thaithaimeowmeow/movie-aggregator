@@ -1,3 +1,4 @@
+//Model for both movies and series, since they have the same properties
 export interface Movie {
     id?: number;
     imdb_id?: string;
@@ -13,6 +14,8 @@ export interface Movie {
     popularity?: number;
     poster_path?: string;
     release_date?: string;
+    first_air_date?: string; //series only
+    original_name?: string; //series only
     revenue?: number;
     runtime?: number;
     status?: string;

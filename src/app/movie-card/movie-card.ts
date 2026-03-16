@@ -1,12 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, input, Input, OnInit } from '@angular/core';
 import { Movie } from '../models/movie';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from "@angular/router";
 
 
 @Component({
   selector: 'app-movie-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './movie-card.html',
   styleUrl: './movie-card.css',
 })
@@ -17,7 +18,7 @@ export class MovieCard implements OnInit {
   posterUrl = '';
 
   @Input() movie!: Movie;
-
+  @Input() pageType: string = '';
 
 
   constructor() { }

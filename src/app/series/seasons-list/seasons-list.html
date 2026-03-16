@@ -1,0 +1,17 @@
+<main>
+  <div class="video-grid">
+
+    @let seasons = (seasons$ | async);
+
+    @if (seasons === null) {
+    @for (item of skeletonArray; track $index) {
+    <div class="movie-skeleton"></div>
+    }
+    } @else {
+    @for (season of seasons; track season.id) {
+    <app-seasons [season]="season"></app-seasons>
+    }
+    }
+
+  </div>
+</main>

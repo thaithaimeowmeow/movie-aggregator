@@ -4,9 +4,8 @@ import { CommonModule } from '@angular/common';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieService } from '../services/movie-service';
 import { Observable } from 'rxjs';
-import { map,startWith } from 'rxjs/operators';
-
-
+import { map, shareReplay, startWith } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -19,25 +18,40 @@ import { map,startWith } from 'rxjs/operators';
 
 export class MovieList implements OnInit {
 
-
-  loading = true;
+  pageType: string = "";
 
   movies$: Observable<Movie[]> | undefined;
 
-  skeletonArray = Array(14);
+  skeletonArray = Array(20); // Array of 20 empty values for skeleton loading
 
-  constructor(private movieService: MovieService) {
+  constructor(private movieService: MovieService, private route: ActivatedRoute) {
 
-    this.movies$ = this.movieService.getPopularMovies(1).pipe(
-      map((res: any) => res.results),
-      startWith([])
-    );
+    this.pageType = this.route.snapshot.data['pageType']; // 'movies' or 'series'
+
+    console.log(this.pageType);
+
+    if (this.pageType === 'movies') {
+      this.movies$ = this.movieService.getPopularMovies(1).pipe(
+        map((res: any) => res.results),
+        startWith([]),
+        shareReplay(1)
+      );
+    } else if (this.pageType === 'series') {
+      this.movies$ = this.movieService.getPopularSeries(1).pipe(
+        map((res: any) => res.results),
+        startWith([]),
+        shareReplay(1)
+      );
+    }
+    // else
+    //   return 404;
+
+
   }
 
   ngOnInit() {
-    
-  }
 
+  }
 
 }
 

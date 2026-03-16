@@ -1,0 +1,30 @@
+<div class="video-item">
+
+    <a class="thumbnail">
+
+        <div class="poster">
+
+            <img #posterImg loading="lazy" [src]="posterUrl" [alt]="season.name" (error)="useFallback()" />
+
+        </div>
+        <div class="date-overlay">
+            {{ season.air_date}}
+        </div>
+
+        <div class="rating-overlay font-bold">
+            ⭐ {{ season.vote_average }}
+        </div>
+
+        <!-- <div class="network">
+            Netflix
+        </div> -->
+
+    </a>
+
+    <h3 class="title font-bold text-lg text-white"> {{ season.name }} <span class="text-gray-500 text-sm">{{ season.episode_count }} episodes</span></h3>
+
+    <p class="description text-white text-sm">
+        {{ season.overview }}
+    </p>
+
+</div>

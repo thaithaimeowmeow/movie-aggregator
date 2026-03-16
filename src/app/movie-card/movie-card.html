@@ -1,6 +1,6 @@
 <div class="video-item">
 
-    <a class="thumbnail">
+    <a class="thumbnail" [routerLink]="['/', pageType, movie.id]">
 
         <div class="poster">
 
@@ -8,10 +8,10 @@
 
         </div>
         <div class="date-overlay">
-            {{ movie.release_date }}
+            {{ movie.release_date || movie.first_air_date }}
         </div>
 
-        <div class="rating-overlay">
+        <div class="rating-overlay font-bold">
             ⭐ {{ movie.vote_average }}
         </div>
 
@@ -21,19 +21,12 @@
 
     </a>
 
-    <h3 class="title font-bold text-lg text-white">{{ movie.title }}</h3>
+    <h3 class="title font-bold text-lg text-white">{{ movie.title || movie.original_name}}</h3>
 
     <p class="description text-white text-sm">
         {{ movie.overview }}
     </p>
 
-    <!-- <div class="text-white" *ngIf="movie.adult ; else underAge">
-        You can watch this movie
-    </div>
-
-    <ng-template #underAge>
-        <div class="text-white">You cannot watch this movie</div>
-    </ng-template> -->
-
+ 
 
 </div>
