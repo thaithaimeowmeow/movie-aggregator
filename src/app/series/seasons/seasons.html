@@ -2,7 +2,7 @@
 
     <a class="thumbnail">
 
-        <div class="poster">
+        <div class="poster cursor-pointer" (click)="openDetail()">
 
             <img #posterImg loading="lazy" [src]="posterUrl" [alt]="season.name" (error)="useFallback()" />
 

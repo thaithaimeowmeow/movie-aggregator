@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Season } from '../../models/series-season';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-seasons',
@@ -9,14 +10,13 @@ import { Season } from '../../models/series-season';
 })
 export class Seasons {
 
-  id: string | null = null;
   @Input() season!: Season;
 
   DEFAULT_POSTER_URL = 'https://image.tmdb.org/t/p/w500';
   FALLBACK_POSTER = '/no-poster.png';
   posterUrl = '';
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
     if (this.season?.poster_path) {
@@ -25,6 +25,12 @@ export class Seasons {
       this.posterUrl = this.FALLBACK_POSTER;
     }
 
+  }
+  
+  openDetail() {
+    console.log("detail", this.season.id);
+    console.log("seasonNumber", this.season.season_number);
+    this.router.navigate([`/series/${this.season.id}/${this.season.season_number}/`]);
   }
 
 

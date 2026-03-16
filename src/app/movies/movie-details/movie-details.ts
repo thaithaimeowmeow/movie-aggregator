@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { MediaPlayer } from '../../components/media-player/media-player';
 
 @Component({
   selector: 'app-movie-details',
-  imports: [],
+  imports: [MediaPlayer],
   templateUrl: './movie-details.html',
   styleUrl: './movie-details.css',
 })
@@ -14,7 +15,11 @@ export class MovieDetails {
   pageType: string = '';
   videoUrl: SafeResourceUrl = '';
 
-  constructor(private route: ActivatedRoute, private sanitizer: DomSanitizer) {
+  showPlayer = false;
+
+  constructor(private route: ActivatedRoute,
+    private sanitizer: DomSanitizer,
+    private router: Router) {
     this.pageType = this.route.snapshot.data['pageType'];
     this.id = this.route.snapshot.paramMap.get('id');
   }
@@ -22,10 +27,20 @@ export class MovieDetails {
   ngOnInit() {
     if (!this.id) return;
 
+    console.log(this.pageType, this.id);
+
+
+    if (!this.id) return;
+
     const url = this.pageType === 'movies'
-      ? `https://vidsrc.to/embed/movie/${this.id}`
-      : `https://vidsrc.to/embed/tv/${this.id}/1/1`;
+      ? `https://vidfast.pro/movie/${this.id}`
+      : `https://vidfast.pro/tv/${this.id}/1/1`;
 
     this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+
+  }
+
+  close() {
+    this.router.navigate(['..'], { relativeTo: this.route });
   }
 }

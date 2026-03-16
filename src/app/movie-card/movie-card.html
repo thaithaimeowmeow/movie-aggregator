@@ -1,7 +1,6 @@
 <div class="video-item">
-
-    <a class="thumbnail" [routerLink]="['/', pageType, movie.id]">
-
+    <!-- <a class="thumbnail" [routerLink]="['/', pageType, movie.id]"> -->
+    <div class="thumbnail cursor-pointer" (click)="openDetail()">
         <div class="poster">
 
             <img #posterImg loading="lazy" [src]="posterUrl" [alt]="movie.title" (error)="useFallback()" />
@@ -18,8 +17,8 @@
         <!-- <div class="network">
             Netflix
         </div> -->
-
-    </a>
+    </div>
+    <!-- </a> -->
 
     <h3 class="title font-bold text-lg text-white">{{ movie.title || movie.original_name}}</h3>
 
@@ -27,6 +26,6 @@
         {{ movie.overview }}
     </p>
 
- 
+
 
 </div>

@@ -1,2 +1,6 @@
-<p>movie-details works!</p>
-<app-media-player></app-media-player>
+<div class="modal-backdrop" (click)="close()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="close()">✕</button>
+    <app-media-player [videoUrl]="videoUrl"></app-media-player>
+  </div>
+</div>

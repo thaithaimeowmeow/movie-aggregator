@@ -2,12 +2,13 @@ import { Component, input, Input, OnInit } from '@angular/core';
 import { Movie } from '../models/movie';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from "@angular/router";
+import { Router } from '@angular/router';
 
 
 @Component({
   selector: 'app-movie-card',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './movie-card.html',
   styleUrl: './movie-card.css',
 })
@@ -21,9 +22,14 @@ export class MovieCard implements OnInit {
   @Input() pageType: string = '';
 
 
-  constructor() { }
+  constructor(private router: Router) { }
 
-
+  openDetail() {
+    console.log("detail", this.movie.id);
+    console.log("pageType", this.pageType);
+    this.router.navigate([`/${this.pageType}`, this.movie.id]);
+  }
+  
   ngOnInit() {
 
     if (this.movie?.poster_path) {
