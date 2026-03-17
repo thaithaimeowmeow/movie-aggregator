@@ -12,6 +12,8 @@ import { MediaPlayer } from '../../components/media-player/media-player';
 export class MovieDetails {
 
   id: string | null = null;
+  seasonNum: string | null = null;
+  episode: string | null = null;
   pageType: string = '';
   videoUrl: SafeResourceUrl = '';
 
@@ -20,8 +22,12 @@ export class MovieDetails {
   constructor(private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private router: Router) {
+
     this.pageType = this.route.snapshot.data['pageType'];
     this.id = this.route.snapshot.paramMap.get('id');
+    this.seasonNum = this.route.snapshot.paramMap.get('seasonNum')
+    this.episode = this.route.snapshot.paramMap.get('episode')
+
   }
 
   ngOnInit() {
@@ -30,11 +36,16 @@ export class MovieDetails {
     console.log(this.pageType, this.id);
 
 
+    console.log(this.seasonNum)
+    console.log(this.episode)
+
     if (!this.id) return;
+
+
 
     const url = this.pageType === 'movies'
       ? `https://vidfast.pro/movie/${this.id}`
-      : `https://vidfast.pro/tv/${this.id}/1/1`;
+      : `https://vidfast.pro/tv/${this.id}/${this.seasonNum}/${this.episode}`;
 
     this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
 

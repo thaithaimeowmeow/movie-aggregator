@@ -9,7 +9,7 @@
     }
     } @else {
     @for (season of seasons; track season.id) {
-    <app-seasons [season]="season"></app-seasons>
+    <app-seasons [season]="season" [seriesId]="id"></app-seasons>
     }
     }
 

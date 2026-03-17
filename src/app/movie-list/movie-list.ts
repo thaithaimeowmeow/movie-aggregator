@@ -30,6 +30,10 @@ export class MovieList implements OnInit {
 
     console.log(this.pageType);
 
+  }
+
+  ngOnInit() {
+
     if (this.pageType === 'movies') {
       this.movies$ = this.movieService.getPopularMovies(1).pipe(
         map((res: any) => res.results),
@@ -43,13 +47,7 @@ export class MovieList implements OnInit {
         shareReplay(1)
       );
     }
-    // else
-    //   return 404;
 
-
-  }
-
-  ngOnInit() {
 
   }
 

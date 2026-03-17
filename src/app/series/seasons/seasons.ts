@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 export class Seasons {
 
   @Input() season!: Season;
+  @Input() seriesId!: string;
 
   DEFAULT_POSTER_URL = 'https://image.tmdb.org/t/p/w500';
   FALLBACK_POSTER = '/no-poster.png';
@@ -28,9 +29,7 @@ export class Seasons {
   }
   
   openDetail() {
-    console.log("detail", this.season.id);
-    console.log("seasonNumber", this.season.season_number);
-    this.router.navigate([`/series/${this.season.id}/${this.season.season_number}/`]);
+    this.router.navigate([`/series/${this.seriesId}/${this.season.season_number}/`]);
   }
 
 

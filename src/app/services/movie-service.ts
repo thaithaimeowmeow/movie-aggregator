@@ -48,6 +48,11 @@ export class MovieService {
     });
   }
 
+  getSeasonDetails(seriesId: string | null, seasonNum: string | null) {
+    return this.http.get(`${this.TMDB_URL}/tv/${seriesId}/season/${seasonNum}`, {
+      headers: this.headers
+    });
+  }
 
 
 
