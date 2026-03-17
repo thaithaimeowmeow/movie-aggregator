@@ -41,8 +41,6 @@ export class MovieDetails {
 
     if (!this.id) return;
 
-
-
     const url = this.pageType === 'movies'
       ? `https://vidfast.pro/movie/${this.id}`
       : `https://vidfast.pro/tv/${this.id}/${this.seasonNum}/${this.episode}`;
@@ -50,6 +48,9 @@ export class MovieDetails {
     this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
 
   }
+
+
+  
 
   close() {
     this.router.navigate(['..'], { relativeTo: this.route });

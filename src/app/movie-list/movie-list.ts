@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { Movie } from '../models/movie';
 import { CommonModule } from '@angular/common';
 import { MovieCard } from '../movie-card/movie-card';
@@ -6,7 +6,8 @@ import { MovieService } from '../services/movie-service';
 import { Observable } from 'rxjs';
 import { map, shareReplay, startWith } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-
+import { SearchService } from '../services/search-service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-movie-list',
@@ -24,11 +25,18 @@ export class MovieList implements OnInit {
 
   skeletonArray = Array(20); // Array of 20 empty values for skeleton loading
 
-  constructor(private movieService: MovieService, private route: ActivatedRoute) {
+  private destroyRef = inject(DestroyRef);
+
+  constructor(private movieService: MovieService, private route: ActivatedRoute, private searchService: SearchService) {
 
     this.pageType = this.route.snapshot.data['pageType']; // 'movies' or 'series'
 
-    console.log(this.pageType);
+    // console.log(this.pageType);
+
+
+  }
+
+  doSearch(query: string) {
 
   }
 
@@ -48,6 +56,14 @@ export class MovieList implements OnInit {
       );
     }
 
+
+    this.searchService.search$.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(query => {
+
+      console.log('search query:', query, Math.random());
+
+    });
 
   }
 

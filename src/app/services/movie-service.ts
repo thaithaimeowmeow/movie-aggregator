@@ -40,7 +40,7 @@ export class MovieService {
       }
     });
   }
-  
+
 
   getSeriesDetails(seriesId: string | null) {
     return this.http.get(`${this.TMDB_URL}/tv/${seriesId}`, {
@@ -54,6 +54,19 @@ export class MovieService {
     });
   }
 
+  search(type: string, query: string = "") {
+
+    let queryType = ''
+    if (type === 'movie')
+      queryType = 'movie'
+    else
+      queryType = 'tv'
+
+    return this.http.get(`${this.TMDB_URL}/search/{${queryType}}?query=${query}`, {
+      headers: this.headers
+    });
+
+  }
 
 
 
