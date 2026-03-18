@@ -17,6 +17,33 @@ export class MovieService {
 
   constructor(private http: HttpClient) { }
 
+
+
+  search(type: string, query: string = "", pages: number = 1) {
+    let queryType = ''
+    if (type === 'movie' || type === 'movies')
+      queryType = 'movie'
+    else
+      queryType = 'tv'
+
+    return this.http.get(`${this.TMDB_URL}/search/${queryType}?query=${query}&page=${pages}`, {
+      headers: this.headers
+    });
+
+  }
+
+  getTrending(pages: number = 1, type: string = 'movie', time_window: string = 'week') {
+
+    return this.http.get(`${this.TMDB_URL}/trending/${type}/${time_window}`, {
+      headers: this.headers,
+      params: {
+        page: pages
+      }
+    });
+  }
+
+  // Movie
+
   getPopularMovies(pages: number = 1) {
 
     return this.http.get(`${this.TMDB_URL}/movie/popular`, {
@@ -30,6 +57,17 @@ export class MovieService {
   getMovieDetails(movieId: number) {
     return this.http.get(`${this.TMDB_URL}/movie/${movieId}`);
   }
+
+
+
+  // TV Series
+  getSeasonDetails(seriesId: string | null, seasonNum: string | null) {
+    return this.http.get(`${this.TMDB_URL}/tv/${seriesId}/season/${seasonNum}`, {
+      headers: this.headers
+    });
+  }
+
+
 
   getPopularSeries(pages: number = 1) {
 
@@ -48,25 +86,7 @@ export class MovieService {
     });
   }
 
-  getSeasonDetails(seriesId: string | null, seasonNum: string | null) {
-    return this.http.get(`${this.TMDB_URL}/tv/${seriesId}/season/${seasonNum}`, {
-      headers: this.headers
-    });
-  }
 
-  search(type: string, query: string = "") {
-
-    let queryType = ''
-    if (type === 'movie')
-      queryType = 'movie'
-    else
-      queryType = 'tv'
-
-    return this.http.get(`${this.TMDB_URL}/search/{${queryType}}?query=${query}`, {
-      headers: this.headers
-    });
-
-  }
 
 
 

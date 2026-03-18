@@ -38,18 +38,24 @@ export class MovieList implements OnInit {
 
   doSearch(query: string) {
 
+    this.movies$ = this.movieService.search(this.pageType, query, 1).pipe(
+      map((res: any) => res.results),
+      startWith([]),
+      shareReplay(1)
+    );
+
   }
 
   ngOnInit() {
 
     if (this.pageType === 'movies') {
-      this.movies$ = this.movieService.getPopularMovies(1).pipe(
+      this.movies$ = this.movieService.getTrending(1, 'movie').pipe(
         map((res: any) => res.results),
         startWith([]),
         shareReplay(1)
       );
     } else if (this.pageType === 'series') {
-      this.movies$ = this.movieService.getPopularSeries(1).pipe(
+      this.movies$ = this.movieService.getTrending(1, 'tv').pipe(
         map((res: any) => res.results),
         startWith([]),
         shareReplay(1)
@@ -62,6 +68,7 @@ export class MovieList implements OnInit {
     ).subscribe(query => {
 
       console.log('search query:', query, Math.random());
+      this.doSearch(query)
 
     });
 
