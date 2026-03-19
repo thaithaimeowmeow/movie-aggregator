@@ -1,12 +1,12 @@
 .video-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 220px);
+  display: flex;
+  flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
   padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
-
-
 
 .movie-skeleton{
   width:220px;

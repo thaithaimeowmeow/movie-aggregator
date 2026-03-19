@@ -1,16 +1,14 @@
 <main>
-  <div class="video-grid">
+  <div class="video-grid" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+    [scrollWindow]="true" (scrolled)="onScrolled()">
+    @for (movie of movies; track movie.id) {
+    <app-movie-card [movie]="movie" [pageType]="pageType"></app-movie-card>
+    }
 
-    @let movies = (movies$ | async);
-
-    @if (movies?.length) {
-      @for (movie of movies!; track movie.id) {
-        <app-movie-card [movie]="movie" [pageType]="pageType"></app-movie-card>
-      }
-    } @else {
-      @for (item of skeletonArray; track $index) {
-        <div class="movie-skeleton"></div>
-      }
+    @if (loading) {
+    @for (item of skeletonArray; track $index) {
+    <div class="movie-skeleton"></div>
+    }
     }
 
   </div>

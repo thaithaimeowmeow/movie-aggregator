@@ -1,78 +1,95 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, AfterViewInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { Movie } from '../models/movie';
 import { CommonModule } from '@angular/common';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieService } from '../services/movie-service';
-import { Observable } from 'rxjs';
-import { map, shareReplay, startWith } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { SearchService } from '../services/search-service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 @Component({
   selector: 'app-movie-list',
   standalone: true,
-  imports: [CommonModule, MovieCard],
+  imports: [CommonModule, MovieCard, InfiniteScrollDirective],
   templateUrl: './movie-list.html',
   styleUrl: './movie-list.css',
 })
+export class MovieList implements OnInit, AfterViewInit {
 
-export class MovieList implements OnInit {
-
-  pageType: string = "";
-
-  movies$: Observable<Movie[]> | undefined;
-
-  skeletonArray = Array(20); // Array of 20 empty values for skeleton loading
+  pageType: string = '';
+  movies: Movie[] = [];
+  skeletonArray = Array(20);
+  currentPage = 1;
+  loading = false;
+  searchQuery = '';
 
   private destroyRef = inject(DestroyRef);
+  private cdr = inject(ChangeDetectorRef);
+  private ngZone = inject(NgZone);
 
-  constructor(private movieService: MovieService, private route: ActivatedRoute, private searchService: SearchService) {
-
-    this.pageType = this.route.snapshot.data['pageType']; // 'movies' or 'series'
-
-    // console.log(this.pageType);
-
-
-  }
-
-  doSearch(query: string) {
-
-    this.movies$ = this.movieService.search(this.pageType, query, 1).pipe(
-      map((res: any) => res.results),
-      startWith([]),
-      shareReplay(1)
-    );
-
+  constructor(
+    private movieService: MovieService,
+    private route: ActivatedRoute,
+    private searchService: SearchService,
+  ) {
+    this.pageType = this.route.snapshot.data['pageType'];
   }
 
   ngOnInit() {
-
-    if (this.pageType === 'movies') {
-      this.movies$ = this.movieService.getTrending(1, 'movie').pipe(
-        map((res: any) => res.results),
-        startWith([]),
-        shareReplay(1)
-      );
-    } else if (this.pageType === 'series') {
-      this.movies$ = this.movieService.getTrending(1, 'tv').pipe(
-        map((res: any) => res.results),
-        startWith([]),
-        shareReplay(1)
-      );
-    }
-
-
     this.searchService.search$.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(query => {
-
-      console.log('search query:', query, Math.random());
-      this.doSearch(query)
-
+      this.searchQuery = query;
+      this.movies = [];
+      this.currentPage = 1;
+      this.loadPage(1);
     });
-
   }
 
-}
+  ngAfterViewInit() {
+    console.log('ngAfterViewInit called');
+    this.loadPage(1);
+    this.cdr.detectChanges();
+  }
 
+  loadPage(page: number) {
+    console.log('loadPage called, loading:', this.loading);
+    if (this.loading) return;
+    this.loading = true;
+
+    const request$ = this.searchQuery
+      ? this.movieService.search(this.pageType, this.searchQuery, page)
+      : this.pageType === 'movies'
+        ? this.movieService.getTrending(page, 'movie')
+        : this.movieService.getTrending(page, 'tv');
+
+    request$.pipe(
+      map((res: any) => res.results)
+    ).subscribe({
+      next: (results: Movie[]) => {
+        console.log('results:', results.length);
+        this.ngZone.run(() => {
+          this.movies = [...this.movies, ...results];
+          console.log('movies:', this.movies.length);
+          this.currentPage = page;
+          this.loading = false;
+          this.cdr.markForCheck();
+        });
+      },
+      error: (err) => {
+        console.log('error:', err);
+        this.loading = false;
+      }
+    });
+  }
+
+  onScrolled() {
+    this.loadPage(this.currentPage + 1);
+  }
+
+  ngOnDestroy() {
+    console.log('MovieList destroyed');
+  }
+}
